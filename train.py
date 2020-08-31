@@ -139,8 +139,6 @@ def train():    #Main Train Function
 
     # Device agnostic code, automatically uses CUDA if it's enabled
     device = torch.device("cuda:0" if (torch.cuda.is_available() and args.gpu) else "cpu")
-    device
-
 
     # change to device
     model.to(device)
@@ -164,8 +162,6 @@ def train():    #Main Train Function
             accuracy += equality.type(torch.FloatTensor).mean()
         
         return test_loss, accuracy
-
-    print(device)
 
     #Training the classifer using our data
 
@@ -225,14 +221,8 @@ def train():    #Main Train Function
 
 #region Main
 if __name__ == "__main__":
-    print (args)
     print ("Using data from path " + args.data_dir + " for training the model.")
-    if args.gpu:
-        print ("use gpu")
-    if args.verbose:
-        print ("print everything happening")
     if args.save_dir is not None:
-        print ("do save checkpoints at every epoch inside folder " + args.save_dir)
         if not os.path.isdir(args.save_dir):    #if directory doesn't exist
             os.makedirs(args.save_dir)          #create directory
     train()

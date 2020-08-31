@@ -51,12 +51,6 @@ def parse_json_file(filename):  #return data from json file
 
 def run_prediction(): #Run main prediction process
     global args
-    print (args)    #print all arguments
-    if args.gpu:
-        print ("Using gpu.")
-
-    json_data = parse_json_file(args.category_names) #get json data
-    print (json_data)
 
     import torch
     import PIL
@@ -164,7 +158,7 @@ def run_prediction(): #Run main prediction process
         # No need for GPU on this part (just causes problems)
         model.to("cpu")
         if args.gpu:
-            model.to("gpu")
+            model.to("cuda:0")
         
         
         # Set model to evaluate
@@ -195,13 +189,17 @@ def run_prediction(): #Run main prediction process
         
         return top_probs, top_labels, top_flowers
     
-    flower_num = args.image_path
+    flower_num = args.image_path.split('/')[2]
     cat_to_name = parse_json_file(args.category_names)
-    # title_ = cat_to_name[flower_num]
+    title_ = cat_to_name[flower_num]
     img = process_image(args.image_path)
     model = load_checkpoint()
-    probs, labs, flowers = predict(args.image_path, model) 
-    print (probs, labs, flowers)
+    probs, labs, flowers = predict(args.image_path, model)
+    print ("Actual class is "+title_)
+    print ("Prediction Results:") 
+    print (probs)
+    print (labs)
+    print (flowers)
 
 
 #endregion
