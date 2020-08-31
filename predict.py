@@ -34,6 +34,7 @@ parser = argparse.ArgumentParser(description="Predict class name from an image a
 parser.add_argument("image_path", help="path to image file", type=img_path)
 parser.add_argument("checkpoint", help="checkpoint", type=str)  #don't know what type this should be
 parser.add_argument("--top_k", metavar="K", help="return top k most likely classes", type=int, default=5)
+parser.add_argument("--arch", help="architecture", type=str, default="vgg13")
 parser.add_argument("--category_names", metavar="category_names.json", help="path to json file mapping category to real names", type=json_file)
 parser.add_argument("--gpu", help="use gpu for training", action="store_true")
 parser.add_argument("--verbose", help="increase output verbosity", action="store_true")
@@ -78,13 +79,38 @@ def run_prediction(): #Run main prediction process
         checkpoint = torch.load(args.checkpoint)
         
         # Download pretrained model
-        model = models.vgg16(pretrained=True)
+        if args.arch == "resnet18":
+            model = models.resnet18(pretrained = True)
+        elif args.arch == "alexnet":
+            model = models.alexnet(pretrained = True)
+        elif args.arch == "vgg16":
+            model= models.vgg16(pretrained = True)
+        elif args.arch == "squeezenet1_0":
+            model= models.squeezenet1_0(pretrained = True)
+        elif args.arch == "densenet161":
+            model= models.densenet161(pretrained = True)
+        elif args.arch == "inception_v3":
+            model= models.inception_v3(pretrained = True)
+        elif args.arch == "googlenet":
+            model= models.googlenet(pretrained = True)
+        elif args.arch == "shufflenet_v2_x1_0":
+            model= models.shufflenet_v2_x1_0(pretrained = True)
+        elif args.arch == "mobilenet_v2":
+            model= models.mobilenet_v2(pretrained = True)
+        elif args.arch == "resnext50_32x4d":
+            model= models.resnext50_32x4d(pretrained = True)
+        elif args.arch == "wide_resnet50_2":
+            model= models.wide_resnet50_2(pretrained = True)
+        elif args.arch == "mnasnet1_0":
+            model= models.mnasnet1_0(pretrained = True)
+        else:
+            print("ERROR: Invalid architecture!!")
         
         # Freeze parameters so we don't backprop through them
         for param in model.parameters(): param.requires_grad = False
         
         # Load stuff from checkpoint
-        model.class_to_idx = checkpoint['class_to_idx']
+        model.class_to_idx = checkpoint['mapping']
         model.classifier = checkpoint['classifier']
         model.load_state_dict(checkpoint['state_dict'])
 
@@ -169,9 +195,9 @@ def run_prediction(): #Run main prediction process
         
         return top_probs, top_labels, top_flowers
     
-    flower_num = args.image_path.split('/')[2]
+    flower_num = args.image_path
     cat_to_name = parse_json_file(args.category_names)
-    title_ = cat_to_name[flower_num]
+    # title_ = cat_to_name[flower_num]
     img = process_image(args.image_path)
     model = load_checkpoint()
     probs, labs, flowers = predict(args.image_path, model) 
