@@ -44,10 +44,9 @@ args = parser.parse_args()      #Parse arguments
 #region Functions
 def parse_json_file(filename):  #return data from json file
     import json
-    with open(filename, 'r') as myfile:
-        data=myfile.read()
-    obj = json.load(data)
-    return obj
+    with open('cat_to_name.json', 'r') as f:
+        json_data = json.load(f)
+    return json_data
 
 def run_prediction(): #Run main prediction process
     global args

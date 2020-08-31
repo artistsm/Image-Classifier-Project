@@ -46,6 +46,7 @@ def train():    #Main Train Function
     from torch import optim
     from torchvision import datasets, transforms, models
     from collections import OrderedDict
+    import importlib
 
     # %matplotlib inline
     # %config InlineBackend.figure_format = 'retina'
@@ -89,7 +90,32 @@ def train():    #Main Train Function
     image.shape
     train_image_datasets.class_to_idx
     # TODO: Build and train your network
-    model = models.alexnet (pretrained = True)
+    if args.arch == "resnet18":
+        model = models.resnet18(pretrained = True)
+    elif args.arch == "alexnet":
+        model = models.alexnet(pretrained = True)
+    elif args.arch == "vgg16":
+        model= models.vgg16(pretrained = True)
+    elif args.arch == "squeezenet1_0":
+        model= models.squeezenet1_0(pretrained = True)
+    elif args.arch == "densenet161":
+        model= models.densenet161(pretrained = True)
+    elif args.arch == "inception_v3":
+        model= models.inception_v3(pretrained = True)
+    elif args.arch == "googlenet":
+        model= models.googlenet(pretrained = True)
+    elif args.arch == "shufflenet_v2_x1_0":
+        model= models.shufflenet_v2_x1_0(pretrained = True)
+    elif args.arch == "mobilenet_v2":
+        model= models.mobilenet_v2(pretrained = True)
+    elif args.arch == "resnext50_32x4d":
+        model= models.resnext50_32x4d(pretrained = True)
+    elif args.arch == "wide_resnet50_2":
+        model= models.wide_resnet50_2(pretrained = True)
+    elif args.arch == "mnasnet1_0":
+        model= models.mnasnet1_0(pretrained = True)
+    else:
+        print("ERROR: Invalid architecture!!")
 
     # updating Classifer in the network according to our 
     for param in model.parameters(): 
@@ -193,10 +219,7 @@ def train():    #Main Train Function
              }  
 
     torch.save(checkpoint, 'my_checkpoint.pth')
-
-    print (args)
-    raise Exception("Function not implemented.")
-
+    print("Training Completed!! model saved as my_checkpoint.pth")
 
 #endregion
 
