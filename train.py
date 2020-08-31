@@ -23,9 +23,9 @@ parser = argparse.ArgumentParser(description="Train a new network on a dataset a
 parser.add_argument("data_dir", help="directory path containing training data", type=dir_path)
 parser.add_argument("--save_dir", help="directory path to save checkpoints", type=str)
 parser.add_argument("--arch", help="architecture", type=str, default="vgg13")
-parser.add_argument("--learning_rate", help="learning rate for training", type=float, default=0.01)
-parser.add_argument("--hidden_units", help="hidden units", type=int, default=512)
-parser.add_argument("--epochs", help="number of epochs for training", type=int, default=20)
+parser.add_argument("--learning_rate", help="learning rate for training", type=float, default=0.001)
+parser.add_argument("--hidden_units", help="hidden units", type=int, default=2048)
+parser.add_argument("--epochs", help="number of epochs for training", type=int, default=10)
 parser.add_argument("--gpu", help="use gpu for training", action="store_true")
 parser.add_argument("--verbose", help="increase output verbosity", action="store_true")
 
@@ -47,8 +47,8 @@ def train():    #Main Train Function
     from torchvision import datasets, transforms, models
     from collections import OrderedDict
 
-    %matplotlib inline
-    %config InlineBackend.figure_format = 'retina'
+    # %matplotlib inline
+    # %config InlineBackend.figure_format = 'retina'
     
     data_dir = args.data_dir
     train_dir = data_dir + '/train'
@@ -91,7 +91,7 @@ def train():    #Main Train Function
     # TODO: Build and train your network
     model = models.alexnet (pretrained = True)
 
-    # updating Classifer in the network according to our requirements
+    # updating Classifer in the network according to our 
     for param in model.parameters(): 
         param.requires_grad = False
 
@@ -202,7 +202,7 @@ def train():    #Main Train Function
 
 #region Main
 if __name__ == "__main__":
-    print args
+    print (args)
     print ("Using data from path " + args.data_dir + " for training the model.")
     if args.gpu:
         print ("use gpu")
